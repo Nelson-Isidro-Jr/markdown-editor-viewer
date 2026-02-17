@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://md-editor-viewer.onrender.com/sitemap.xml
+Sitemap: https://markdown-editor-viewer.onrender.com/sitemap.xml
 
 # Crawl-delay for polite crawling
 Crawl-delay: 1

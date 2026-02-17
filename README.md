@@ -54,7 +54,7 @@ Easy on the eyes, day or night. One click to switch.
 ### Use the Live Version
 
 Visit the hosted version and start writing immediately:
-- **URL**: [https://md-editor-viewer.onrender.com](https://md-editor-viewer.onrender.com)
+- **URL**: [https://markdown-editor-viewer.onrender.com](https://markdown-editor-viewer.onrender.com)
 
 ### Run Locally
 
