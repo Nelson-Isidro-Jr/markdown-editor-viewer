@@ -1,0 +1,19 @@
+{
+  "name": "md-to-pdf",
+  "version": "1.0.0",
+  "description": "Markdown to PDF exporter with real-time preview and Mermaid diagram support",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "docx": "^9.5.3",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.2.1",
+    "helmet": "^8.1.0",
+    "highlight.js": "^11.11.0",
+    "marked": "^15.0.0",
+    "puppeteer": "^24.2.0"
+  }
+}
