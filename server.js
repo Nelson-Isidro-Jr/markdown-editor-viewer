@@ -56,7 +56,56 @@ app.use('/export/pdf', exportLimiter);
 app.use('/export/docx', exportLimiter);
 
 app.use(express.json({ limit: '50mb' }));
-app.use(express.static(path.join(__dirname, 'public')));
+
+// SEO-friendly static file serving with caching
+app.use(express.static(path.join(__dirname, 'public'), {
+  maxAge: '1d', // Cache static assets for 1 day
+  etag: true,
+  lastModified: true,
+}));
+
+// SEO headers for all routes
+app.use((req, res, next) => {
+  // Remove X-Powered-By header for security
+  res.removeHeader('X-Powered-By');
+  
+  // Add SEO-friendly headers
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  
+  // Cache control for HTML pages
+  if (req.path === '/' || req.path.endsWith('.html')) {
+    res.setHeader('Cache-Control', 'public, max-age=3600'); // 1 hour for HTML
+  }
+  
+  next();
+});
+
+// Dynamic sitemap for better SEO
+app.get('/sitemap.xml', (req, res) => {
+  const baseUrl = 'https://markdown-editor-viewer.onrender.com';
+  const today = new Date().toISOString().split('T')[0];
+  
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${baseUrl}/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>`;
+  
+  res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=86400'); // 1 day
+  res.send(sitemap);
+});
+
+// Health check endpoint for monitoring
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
 
 // Persistent Puppeteer browser instance
 let browser = null;
