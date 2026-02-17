@@ -251,15 +251,15 @@ async function parseMarkdownToDocx(markdown) {
   let inOrderedList = false;
   let mermaidDiagrams = [];
 
-  // PDF-matching colors
+  // Preview-matching colors (light blue theme)
   const COLORS = {
     text: '1A1A2E',           // Main text color
-    border: 'D0D7DE',         // Border color (gray)
+    border: 'D0D7DE',         // Border color (light gray)
     accent: '0969DA',         // Blue accent (links, blockquote border)
     codeBg: 'F6F8FA',         // Code background
     codeInlineBg: 'EFF1F3',   // Inline code background
     codeInlineText: 'C7254E', // Inline code text color
-    blockquoteBg: 'F0F7FF',   // Blockquote background
+    blockquoteBg: 'F0F7FF',   // Blockquote background (light blue)
     tableHeaderBg: 'F6F8FA',  // Table header background
     tableStripeBg: 'F8F9FA',  // Table stripe background
     mutedText: '656D76',      // Muted/secondary text
@@ -271,25 +271,23 @@ async function parseMarkdownToDocx(markdown) {
     let remaining = text;
 
     while (remaining.length > 0) {
-      const boldMatch = remaining.match(/\*\*(.+?)\*\*/);
-      const italicMatch = remaining.match(/\*(.+?)\*/);
-      const codeMatch = remaining.match(/`(.+?)`/);
-      const linkMatch = remaining.match(/\[(.+?)\]\((.+?)\)/);
+      // Find all potential matches - more flexible patterns
+      const boldMatch = remaining.match(/^(\*\*.+?\*\*)/);
+      const italicMatch = remaining.match(/^(\*.+?\*)/);
+      const codeMatch = remaining.match(/^(`.+?`)/);
+      const linkMatch = remaining.match(/^(\[.+?\]\(.+?\))/);
 
       let match = null;
       let type = null;
 
-      // Priority: links > bold > italic > code
-      if (linkMatch && (!boldMatch || linkMatch.index < boldMatch.index) && 
-          (!italicMatch || linkMatch.index < italicMatch.index) && 
-          (!codeMatch || linkMatch.index < codeMatch.index)) {
+      // Check what matches at the start of remaining text
+      if (linkMatch) {
         match = linkMatch;
         type = 'link';
-      } else if (boldMatch && (!italicMatch || boldMatch.index < italicMatch.index) && 
-                 (!codeMatch || boldMatch.index < codeMatch.index)) {
+      } else if (boldMatch) {
         match = boldMatch;
         type = 'bold';
-      } else if (italicMatch && (!codeMatch || italicMatch.index < codeMatch.index)) {
+      } else if (italicMatch) {
         match = italicMatch;
         type = 'italic';
       } else if (codeMatch) {
@@ -298,51 +296,64 @@ async function parseMarkdownToDocx(markdown) {
       }
 
       if (match) {
-        if (match.index > 0) {
-          runs.push(new TextRun({ 
-            text: remaining.slice(0, match.index), 
-            size: 28, // 14px like PDF
-            font: 'Calibri',
-          }));
+        // Extract the content (without the markdown markers)
+        let content = match[1];
+        
+        if (type === 'link') {
+          // Links: [text](url) -> extract text
+          const linkTextMatch = content.match(/\[(.+?)\]/);
+          if (linkTextMatch) {
+            content = linkTextMatch[1];
+          }
+        } else if (type === 'bold') {
+          // Bold: **text** -> text
+          content = content.slice(2, -2);
+        } else if (type === 'italic') {
+          // Italic: *text* -> text
+          content = content.slice(1, -1);
+        } else if (type === 'code') {
+          // Code: `code` -> code
+          content = content.slice(1, -1);
         }
         
         if (type === 'link') {
           // Links in Word - blue color, underlined
           runs.push(new TextRun({ 
-            text: match[1], 
-            size: 28, // 14px like PDF
-            color: COLORS.accent,
+            text: content, 
+            size: 22, // 11pt
+            color: '0969DA',
             underline: {},
             font: 'Calibri',
           }));
         } else if (type === 'bold') {
           runs.push(new TextRun({ 
-            text: match[1], 
-            size: 28, // 14px like PDF
+            text: content, 
+            size: 22, // 11pt
             bold: true,
             font: 'Calibri',
           }));
         } else if (type === 'italic') {
           runs.push(new TextRun({ 
-            text: match[1], 
-            size: 28, // 14px like PDF
+            text: content, 
+            size: 22, // 11pt
             italics: true,
             font: 'Calibri',
           }));
         } else if (type === 'code') {
           runs.push(new TextRun({ 
-            text: match[1], 
-            size: 24, // ~12px for inline code
+            text: content, 
+            size: 18, // 9pt for inline code
             font: 'Consolas',
-            shading: { fill: COLORS.codeInlineBg },
-            color: COLORS.codeInlineText,
+            shading: { fill: 'EFF1F3' },
+            color: 'C7254E',
           }));
         }
-        remaining = remaining.slice(match.index + match[0].length);
+        remaining = remaining.slice(match[0].length);
       } else {
+        // No match, add remaining text as-is
         runs.push(new TextRun({ 
           text: remaining, 
-          size: 28, // 14px like PDF
+          size: 22, // 11pt
           font: 'Calibri',
         }));
         break;
@@ -354,14 +365,23 @@ async function parseMarkdownToDocx(markdown) {
   const flushList = () => {
     if (currentList.length > 0) {
       currentList.forEach((item, index) => {
+        // Process inline formatting for list items
+        const runs = processInlineFormatting(item);
+        
+        // Add bullet/number prefix
+        const prefix = inOrderedList ? `${index + 1}. ` : `• `;
+        
         elements.push(new Paragraph({
-          children: [new TextRun({
-            text: inOrderedList ? `${index + 1}. ${item}` : `• ${item}`,
-            size: 28,
-            font: 'Calibri',
-          })],
-          indent: { left: 720 },
-          spacing: { after: 40, line: 340 }, // ~1.4 line spacing
+          children: [
+            new TextRun({
+              text: prefix,
+              size: 22,
+              font: 'Calibri',
+            }),
+            ...runs
+          ],
+          indent: { left: 360 }, // Smaller indent for lists
+          spacing: { after: 40, line: 300 },
         }));
       });
       currentList = [];
@@ -390,20 +410,20 @@ async function parseMarkdownToDocx(markdown) {
                   children: cellRuns.map(run => {
                     // Adjust size for table cells (slightly smaller)
                     if (run.options) {
-                      run.options.size = 26;
+                      run.options.size = 20; // 10pt
                     }
                     return run;
                   }),
                   spacing: { after: 0 },
                 })],
                 shading: rowIndex === 0 
-                  ? { fill: COLORS.tableHeaderBg } 
-                  : (rowIndex % 2 === 0 ? { fill: COLORS.tableStripeBg } : undefined),
+                  ? { fill: 'F6F8FA' } 
+                  : (rowIndex % 2 === 0 ? { fill: 'F8F9FA' } : undefined),
                 margins: { 
-                  top: 100, 
-                  bottom: 100, 
-                  left: 120, 
-                  right: 120 
+                  top: 80, 
+                  bottom: 80, 
+                  left: 100, 
+                  right: 100 
                 },
                 width: { 
                   size: tableColumnCount > 0 ? Math.floor(100 / tableColumnCount) : 20, 
@@ -415,12 +435,12 @@ async function parseMarkdownToDocx(markdown) {
         }),
         width: { size: 100, type: WidthType.PERCENTAGE },
         borders: {
-          top: { style: BorderStyle.SINGLE, size: 1, color: COLORS.border },
-          bottom: { style: BorderStyle.SINGLE, size: 1, color: COLORS.border },
-          left: { style: BorderStyle.SINGLE, size: 1, color: COLORS.border },
-          right: { style: BorderStyle.SINGLE, size: 1, color: COLORS.border },
-          insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: COLORS.border },
-          insideVertical: { style: BorderStyle.SINGLE, size: 1, color: COLORS.border },
+          top: { style: BorderStyle.SINGLE, size: 1, color: 'D0D7DE' },
+          bottom: { style: BorderStyle.SINGLE, size: 1, color: 'D0D7DE' },
+          left: { style: BorderStyle.SINGLE, size: 1, color: 'D0D7DE' },
+          right: { style: BorderStyle.SINGLE, size: 1, color: 'D0D7DE' },
+          insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: 'D0D7DE' },
+          insideVertical: { style: BorderStyle.SINGLE, size: 1, color: 'D0D7DE' },
         },
       });
       elements.push(docxTable);
@@ -453,11 +473,11 @@ async function parseMarkdownToDocx(markdown) {
           elements.push(new Paragraph({
             children: [new TextRun({
               text: '[Mermaid Diagram]',
-              size: 22,
-              color: COLORS.mutedText,
+              size: 18, // 9pt
+              color: '666666',
             })],
             alignment: AlignmentType.CENTER,
-            spacing: { before: 200, after: 200 },
+            spacing: { before: 160, after: 160 },
           }));
         } else {
           // Code block with background and border (matching PDF)
@@ -474,9 +494,9 @@ async function parseMarkdownToDocx(markdown) {
               children: [new TextRun({
                 text: codeLine || ' ', // Use space for empty lines
                 font: 'Consolas',
-                size: 22, // ~11px
+                size: 18, // 9pt
               })],
-              shading: { fill: COLORS.codeBg },
+              shading: { fill: 'F6F8FA' },
               spacing: { after: 20, line: 280 }, // Proper line spacing
             }));
           });
@@ -485,7 +505,7 @@ async function parseMarkdownToDocx(markdown) {
           elements.push(new Paragraph({ 
             children: [], 
             spacing: { after: 100 },
-            shading: { fill: COLORS.codeBg },
+              shading: { fill: 'F6F8FA' },
           }));
         }
         inCodeBlock = false;
@@ -528,7 +548,7 @@ async function parseMarkdownToDocx(markdown) {
       inTable = false;
     }
 
-    // Headers - matching PDF exactly (H1=2em=40 half-points, H2=1.5em=30, H3=1.25em=25, H4=1.1em=22)
+    // Headers - Word-style sizes (H1=18pt, H2=14pt, H3=12pt, H4=11pt)
     if (line.startsWith('# ')) {
       flushList();
       const isFirstElement = elements.length === 0;
@@ -536,16 +556,15 @@ async function parseMarkdownToDocx(markdown) {
         children: [new TextRun({ 
           text: line.slice(2), 
           bold: true, 
-          size: 40, // 2em = 40 half-points
+          size: 36, // 18pt
           font: 'Calibri',
-          color: COLORS.text,
+          color: '1A1A2E',
         })],
         heading: HeadingLevel.HEADING_1,
-        spacing: { before: isFirstElement ? 0 : 360, after: 160 },
-        pageBreakBefore: !isFirstElement,
-        border: !isFirstElement ? { 
-          bottom: { style: BorderStyle.SINGLE, size: 8, color: COLORS.border } 
-        } : undefined,
+        spacing: { before: isFirstElement ? 0 : 240, after: 120 },
+        border: {
+          bottom: { style: BorderStyle.SINGLE, size: 8, color: 'D0D7DE' }
+        },
       }));
       continue;
     }
@@ -555,14 +574,14 @@ async function parseMarkdownToDocx(markdown) {
         children: [new TextRun({ 
           text: line.slice(3), 
           bold: true, 
-          size: 30, // 1.5em = 30 half-points
+          size: 28, // 14pt
           font: 'Calibri',
-          color: COLORS.text,
+          color: '1A1A2E',
         })],
         heading: HeadingLevel.HEADING_2,
-        spacing: { before: 280, after: 140 },
+        spacing: { before: 200, after: 100 },
         border: { 
-          bottom: { style: BorderStyle.SINGLE, size: 4, color: COLORS.border } 
+          bottom: { style: BorderStyle.SINGLE, size: 4, color: 'D0D7DE' } 
         },
       }));
       continue;
@@ -573,12 +592,12 @@ async function parseMarkdownToDocx(markdown) {
         children: [new TextRun({ 
           text: line.slice(4), 
           bold: true, 
-          size: 25, // 1.25em = 25 half-points
+          size: 24, // 12pt
           font: 'Calibri',
-          color: COLORS.text,
+          color: '1A1A2E',
         })],
         heading: HeadingLevel.HEADING_3,
-        spacing: { before: 220, after: 100 },
+        spacing: { before: 160, after: 80 },
       }));
       continue;
     }
@@ -588,12 +607,12 @@ async function parseMarkdownToDocx(markdown) {
         children: [new TextRun({ 
           text: line.slice(5), 
           bold: true, 
-          size: 22, // 1.1em = 22 half-points
+          size: 22, // 11pt
           font: 'Calibri',
-          color: COLORS.text,
+          color: '1A1A2E',
         })],
         heading: HeadingLevel.HEADING_4,
-        spacing: { before: 180, after: 80 },
+        spacing: { before: 140, after: 60 },
       }));
       continue;
     }
@@ -613,35 +632,46 @@ async function parseMarkdownToDocx(markdown) {
       continue;
     }
 
-    // Horizontal rule - matching PDF
+    // Horizontal rule - Word-style
     if (line.match(/^(---|\*\*\*|___)$/)) {
       flushList();
       elements.push(new Paragraph({
         children: [],
         border: { 
-          bottom: { style: BorderStyle.SINGLE, size: 8, color: COLORS.border } 
+          bottom: { style: BorderStyle.SINGLE, size: 8, color: 'D0D7DE' } 
         },
-        spacing: { before: 240, after: 240 },
+        spacing: { before: 200, after: 200 },
       }));
       continue;
     }
 
-    // Blockquote - matching PDF styling
+    // Blockquote - Word-style with blue left border and padding
     if (line.startsWith('> ')) {
       flushList();
+      let quoteText = line.slice(2);
+      // Check if there's already a leading space
+      const hasLeadingSpace = quoteText.startsWith(' ');
+      // Remove leading space for processing
+      quoteText = quoteText.trimLeft();
+      // Process inline formatting within blockquote
+      const runs = processInlineFormatting(quoteText);
+      // Add leading space back at the start if needed
+      if (hasLeadingSpace || runs.length > 0) {
+        runs.unshift(new TextRun({ 
+          text: ' ', 
+          size: 22,
+          font: 'Calibri',
+        }));
+      }
+      
       elements.push(new Paragraph({
-        children: [new TextRun({ 
-          text: line.slice(2), 
-          size: 24,
-          font: 'Segoe UI',
-          color: COLORS.text,
-        })],
-        indent: { left: 720 },
+        children: runs,
         border: { 
-          left: { style: BorderStyle.SINGLE, size: 24, color: COLORS.accent } 
+          left: { style: BorderStyle.SINGLE, size: 24, color: '0969DA' } 
         },
-        spacing: { before: 120, after: 120, line: 360 },
-        shading: { fill: COLORS.blockquoteBg },
+        spacing: { before: 80, after: 80, line: 300 },
+        margin: { left: 240 }, // Add left margin for space from border
+        shading: { fill: 'F0F7FF' },
       }));
       continue;
     }
@@ -652,7 +682,7 @@ async function parseMarkdownToDocx(markdown) {
       continue;
     }
 
-    // Regular paragraph - match PDF style
+    // Regular paragraph - Word-style
     flushList();
 
     const runs = processInlineFormatting(line);
@@ -660,7 +690,7 @@ async function parseMarkdownToDocx(markdown) {
     if (runs.length > 0) {
       elements.push(new Paragraph({
         children: runs,
-        spacing: { after: 180, line: 340 }, // 1.4 line spacing (close to PDF's 1.7 for printed)
+        spacing: { after: 120, line: 300 }, // Compact line spacing
       }));
     }
   }
@@ -922,10 +952,10 @@ app.post('/export/docx', async (req, res) => {
         properties: {
           page: {
             margin: {
-              top: 1440,    // 1 inch = 1440 twips
-              right: 1440,
-              bottom: 1440,
-              left: 1440,
+              top: 1134,    // 20mm in twips (20 * 56.7)
+              right: 850,   // 15mm in twips
+              bottom: 1134, // 20mm
+              left: 850,    // 15mm
             },
           },
         },

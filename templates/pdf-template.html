@@ -10,61 +10,88 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      font-size: 14px;
-      line-height: 1.7;
-      color: #1a1a2e;
+      font-family: 'Calibri', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 11pt;
+      line-height: 1.5;
+      color: #000;
       background: #fff;
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
 
-    /* ===== Headings ===== */
+    /* ===== Content Container - Full width for Word-like layout ===== */
+    #content {
+      width: 100%;
+      max-width: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* ===== Headings - Word-style, no indentation ===== */
     h1, h2, h3, h4, h5, h6 {
-      margin-top: 1.4em;
-      margin-bottom: 0.5em;
-      font-weight: 600;
-      line-height: 1.3;
+      margin-top: 12pt;
+      margin-bottom: 6pt;
+      margin-left: 0;
+      margin-right: 0;
+      padding-left: 0;
+      padding-right: 0;
+      font-weight: bold;
+      line-height: 1.2;
       page-break-after: avoid;
       break-after: avoid;
+      color: #000;
     }
     h1:first-child, h2:first-child, h3:first-child { margin-top: 0; }
-    h1 { font-size: 2em; border-bottom: 2px solid #d0d7de; padding-bottom: 0.3em; page-break-before: auto; }
-    h2 { font-size: 1.5em; border-bottom: 1px solid #d0d7de; padding-bottom: 0.25em; }
-    h3 { font-size: 1.25em; }
-    h4 { font-size: 1.1em; }
+    h1 { font-size: 18pt; border-bottom: 2px solid #000; padding-bottom: 3pt; margin-top: 0; margin-bottom: 12pt; }
+    h2 { font-size: 14pt; border-bottom: 1px solid #000; padding-bottom: 2pt; margin-top: 14pt; }
+    h3 { font-size: 12pt; margin-top: 12pt; }
+    h4 { font-size: 11pt; font-weight: bold; }
+    h5 { font-size: 11pt; }
+    h6 { font-size: 10pt; }
 
-    /* ===== Paragraphs & Inline ===== */
-    p { margin: 0.8em 0; }
-    a { color: #0969da; text-decoration: none; }
-    strong { font-weight: 600; }
+    /* ===== Paragraphs - No indentation, flush left ===== */
+    p {
+      margin: 6pt 0;
+      margin-left: 0;
+      margin-right: 0;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    a { color: #0563c1; text-decoration: underline; }
+    strong { font-weight: bold; }
     em { font-style: italic; }
-    del { text-decoration: line-through; color: #656d76; }
+    del { text-decoration: line-through; }
 
-    /* ===== Lists ===== */
-    ul, ol { margin: 0.8em 0; padding-left: 2em; }
-    li { margin: 0.25em 0; }
-    li > p { margin: 0.4em 0; }
-    ul ul, ol ol, ul ol, ol ul { margin: 0.2em 0; }
+    /* ===== Lists - ONLY lists have indentation ===== */
+    ul, ol {
+      margin: 6pt 0;
+      margin-left: 0;
+      padding-left: 20pt;
+    }
+    li { margin: 2pt 0; }
+    li > p { margin: 2pt 0; margin-left: 0; padding-left: 0; }
+    ul ul, ol ol, ul ol, ol ul { margin: 2pt 0; margin-left: 0; }
 
-    /* ===== Code ===== */
+    /* ===== Code - Smaller, professional ===== */
     code {
-      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-      font-size: 0.9em;
+      font-family: 'Consolas', 'Courier New', Courier, monospace;
+      font-size: 9pt;
     }
     :not(pre) > code {
-      background: #eff1f3;
-      padding: 2px 6px;
-      border-radius: 4px;
-      color: #c7254e;
+      background: #f0f0f0;
+      padding: 1px 4px;
+      border-radius: 2px;
+      color: #d73a49;
     }
     pre {
-      background: #f6f8fa;
-      border: 1px solid #d0d7de;
-      border-radius: 6px;
-      padding: 16px;
+      background: #f8f8f8;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      padding: 8pt;
       overflow-x: auto;
-      margin: 1em 0;
+      margin: 8pt 0;
+      margin-left: 0;
+      margin-right: 0;
       page-break-inside: avoid;
       break-inside: avoid;
     }
@@ -73,46 +100,53 @@
       padding: 0;
       border-radius: 0;
       color: inherit;
-      font-size: 13px;
-      line-height: 1.5;
+      font-size: 9pt;
+      line-height: 1.4;
     }
 
-    /* ===== Blockquotes ===== */
+    /* ===== Blockquotes - Minimal indent ===== */
     blockquote {
-      border-left: 4px solid #0969da;
-      margin: 1em 0;
-      padding: 0.5em 1em;
-      background: #f0f7ff;
-      color: #24292f;
+      border-left: 3px solid #000;
+      margin: 8pt 0;
+      margin-left: 0;
+      padding: 4pt 12pt;
+      background: #f9f9f9;
+      color: #333;
       page-break-inside: avoid;
       break-inside: avoid;
     }
-    blockquote p { margin: 0.3em 0; }
+    blockquote p { margin: 2pt 0; margin-left: 0; }
 
-    /* ===== Tables ===== */
+    /* ===== Tables - Professional Word-style ===== */
     table {
       border-collapse: collapse;
       width: 100%;
-      margin: 1em 0;
+      margin: 8pt 0;
+      margin-left: 0;
+      margin-right: 0;
       page-break-inside: avoid;
       break-inside: avoid;
+      font-size: 10pt;
     }
     th, td {
-      border: 1px solid #d0d7de;
-      padding: 8px 12px;
+      border: 1px solid #000;
+      padding: 4pt 8pt;
       text-align: left;
+      vertical-align: top;
     }
     th {
-      background: #f6f8fa;
-      font-weight: 600;
+      background: #f0f0f0;
+      font-weight: bold;
     }
-    tr:nth-child(even) { background: #f8f9fa; }
+    tr:nth-child(even) { background: #fafafa; }
 
     /* ===== Horizontal Rules ===== */
     hr {
       border: none;
-      border-top: 2px solid #d0d7de;
-      margin: 2em 0;
+      border-top: 1px solid #000;
+      margin: 12pt 0;
+      margin-left: 0;
+      margin-right: 0;
     }
 
     /* ===== Images ===== */
@@ -126,11 +160,13 @@
     /* ===== Mermaid Diagrams ===== */
     .mermaid {
       text-align: center;
-      margin: 1.5em 0;
+      margin: 10pt 0;
+      margin-left: 0;
+      margin-right: 0;
       page-break-inside: avoid;
       break-inside: avoid;
       background: #fff;
-      padding: 10px;
+      padding: 8pt;
       display: block;
     }
     .mermaid svg {
@@ -140,13 +176,13 @@
       margin: 0 auto;
     }
     .mermaid-error {
-      color: #cf222e;
+      color: #c00;
       background: #fff0f0;
-      border: 1px solid #ff8c8c;
-      border-radius: 6px;
-      padding: 12px;
+      border: 1px solid #c00;
+      border-radius: 3px;
+      padding: 8pt;
       font-family: monospace;
-      font-size: 12px;
+      font-size: 9pt;
       white-space: pre-wrap;
       page-break-inside: avoid;
       break-inside: avoid;
@@ -156,17 +192,19 @@
     .mermaid-wrapper {
       page-break-inside: avoid;
       break-inside: avoid;
-      margin: 1.5em 0;
+      margin: 10pt 0;
+      margin-left: 0;
+      margin-right: 0;
       text-align: center;
     }
 
     /* ===== Task Lists ===== */
     .task-list-item {
       list-style: none;
-      margin-left: -1.5em;
+      margin-left: -16pt;
     }
     .task-list-item input[type="checkbox"] {
-      margin-right: 0.5em;
+      margin-right: 4pt;
     }
 
     /* ===== Print Page Break Helpers ===== */
