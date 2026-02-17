@@ -301,8 +301,8 @@ async function parseMarkdownToDocx(markdown) {
         if (match.index > 0) {
           runs.push(new TextRun({ 
             text: remaining.slice(0, match.index), 
-            size: 24,
-            font: 'Segoe UI',
+            size: 28, // 14px like PDF
+            font: 'Calibri',
           }));
         }
         
@@ -310,30 +310,30 @@ async function parseMarkdownToDocx(markdown) {
           // Links in Word - blue color, underlined
           runs.push(new TextRun({ 
             text: match[1], 
-            size: 24,
+            size: 28, // 14px like PDF
             color: COLORS.accent,
             underline: {},
-            font: 'Segoe UI',
+            font: 'Calibri',
           }));
         } else if (type === 'bold') {
           runs.push(new TextRun({ 
             text: match[1], 
-            size: 24, 
+            size: 28, // 14px like PDF
             bold: true,
-            font: 'Segoe UI',
+            font: 'Calibri',
           }));
         } else if (type === 'italic') {
           runs.push(new TextRun({ 
             text: match[1], 
-            size: 24, 
+            size: 28, // 14px like PDF
             italics: true,
-            font: 'Segoe UI',
+            font: 'Calibri',
           }));
         } else if (type === 'code') {
           runs.push(new TextRun({ 
             text: match[1], 
-            size: 20, 
-            font: 'Courier New',
+            size: 24, // ~12px for inline code
+            font: 'Consolas',
             shading: { fill: COLORS.codeInlineBg },
             color: COLORS.codeInlineText,
           }));
@@ -342,8 +342,8 @@ async function parseMarkdownToDocx(markdown) {
       } else {
         runs.push(new TextRun({ 
           text: remaining, 
-          size: 24,
-          font: 'Segoe UI',
+          size: 28, // 14px like PDF
+          font: 'Calibri',
         }));
         break;
       }
@@ -357,11 +357,11 @@ async function parseMarkdownToDocx(markdown) {
         elements.push(new Paragraph({
           children: [new TextRun({
             text: inOrderedList ? `${index + 1}. ${item}` : `• ${item}`,
-            size: 24,
-            font: 'Segoe UI',
+            size: 28,
+            font: 'Calibri',
           })],
           indent: { left: 720 },
-          spacing: { after: 80, line: 276 },
+          spacing: { after: 40, line: 340 }, // ~1.4 line spacing
         }));
       });
       currentList = [];
@@ -382,15 +382,15 @@ async function parseMarkdownToDocx(markdown) {
               // Process inline formatting in table cells
               const cellRuns = processInlineFormatting(cellContent);
               if (cellRuns.length === 0) {
-                cellRuns.push(new TextRun({ text: '', size: 22 }));
+                cellRuns.push(new TextRun({ text: '', size: 26 }));
               }
               
               return new TableCell({
                 children: [new Paragraph({
                   children: cellRuns.map(run => {
-                    // Adjust size for table cells
+                    // Adjust size for table cells (slightly smaller)
                     if (run.options) {
-                      run.options.size = 22;
+                      run.options.size = 26;
                     }
                     return run;
                   }),
@@ -400,10 +400,10 @@ async function parseMarkdownToDocx(markdown) {
                   ? { fill: COLORS.tableHeaderBg } 
                   : (rowIndex % 2 === 0 ? { fill: COLORS.tableStripeBg } : undefined),
                 margins: { 
-                  top: 80, 
-                  bottom: 80, 
-                  left: 100, 
-                  right: 100 
+                  top: 100, 
+                  bottom: 100, 
+                  left: 120, 
+                  right: 120 
                 },
                 width: { 
                   size: tableColumnCount > 0 ? Math.floor(100 / tableColumnCount) : 20, 
@@ -453,8 +453,7 @@ async function parseMarkdownToDocx(markdown) {
           elements.push(new Paragraph({
             children: [new TextRun({
               text: '[Mermaid Diagram]',
-              italics: true,
-              size: 20,
+              size: 22,
               color: COLORS.mutedText,
             })],
             alignment: AlignmentType.CENTER,
@@ -474,11 +473,11 @@ async function parseMarkdownToDocx(markdown) {
             elements.push(new Paragraph({
               children: [new TextRun({
                 text: codeLine || ' ', // Use space for empty lines
-                font: 'Courier New',
-                size: 20,
+                font: 'Consolas',
+                size: 22, // ~11px
               })],
               shading: { fill: COLORS.codeBg },
-              spacing: { after: 0, line: 240 },
+              spacing: { after: 20, line: 280 }, // Proper line spacing
             }));
           });
           
@@ -529,7 +528,7 @@ async function parseMarkdownToDocx(markdown) {
       inTable = false;
     }
 
-    // Headers - matching PDF exactly
+    // Headers - matching PDF exactly (H1=2em=40 half-points, H2=1.5em=30, H3=1.25em=25, H4=1.1em=22)
     if (line.startsWith('# ')) {
       flushList();
       const isFirstElement = elements.length === 0;
@@ -537,15 +536,15 @@ async function parseMarkdownToDocx(markdown) {
         children: [new TextRun({ 
           text: line.slice(2), 
           bold: true, 
-          size: 48,
-          font: 'Segoe UI',
+          size: 40, // 2em = 40 half-points
+          font: 'Calibri',
           color: COLORS.text,
         })],
         heading: HeadingLevel.HEADING_1,
-        spacing: { before: isFirstElement ? 0 : 400, after: 200 },
+        spacing: { before: isFirstElement ? 0 : 360, after: 160 },
         pageBreakBefore: !isFirstElement,
         border: !isFirstElement ? { 
-          bottom: { style: BorderStyle.SINGLE, size: 12, color: COLORS.border } 
+          bottom: { style: BorderStyle.SINGLE, size: 8, color: COLORS.border } 
         } : undefined,
       }));
       continue;
@@ -556,14 +555,14 @@ async function parseMarkdownToDocx(markdown) {
         children: [new TextRun({ 
           text: line.slice(3), 
           bold: true, 
-          size: 36,
-          font: 'Segoe UI',
+          size: 30, // 1.5em = 30 half-points
+          font: 'Calibri',
           color: COLORS.text,
         })],
         heading: HeadingLevel.HEADING_2,
-        spacing: { before: 300, after: 150 },
+        spacing: { before: 280, after: 140 },
         border: { 
-          bottom: { style: BorderStyle.SINGLE, size: 6, color: COLORS.border } 
+          bottom: { style: BorderStyle.SINGLE, size: 4, color: COLORS.border } 
         },
       }));
       continue;
@@ -574,12 +573,12 @@ async function parseMarkdownToDocx(markdown) {
         children: [new TextRun({ 
           text: line.slice(4), 
           bold: true, 
-          size: 28,
-          font: 'Segoe UI',
+          size: 25, // 1.25em = 25 half-points
+          font: 'Calibri',
           color: COLORS.text,
         })],
         heading: HeadingLevel.HEADING_3,
-        spacing: { before: 250, after: 120 },
+        spacing: { before: 220, after: 100 },
       }));
       continue;
     }
@@ -589,12 +588,12 @@ async function parseMarkdownToDocx(markdown) {
         children: [new TextRun({ 
           text: line.slice(5), 
           bold: true, 
-          size: 26,
-          font: 'Segoe UI',
+          size: 22, // 1.1em = 22 half-points
+          font: 'Calibri',
           color: COLORS.text,
         })],
         heading: HeadingLevel.HEADING_4,
-        spacing: { before: 200, after: 100 },
+        spacing: { before: 180, after: 80 },
       }));
       continue;
     }
@@ -620,9 +619,9 @@ async function parseMarkdownToDocx(markdown) {
       elements.push(new Paragraph({
         children: [],
         border: { 
-          bottom: { style: BorderStyle.SINGLE, size: 12, color: COLORS.border } 
+          bottom: { style: BorderStyle.SINGLE, size: 8, color: COLORS.border } 
         },
-        spacing: { before: 200, after: 200 },
+        spacing: { before: 240, after: 240 },
       }));
       continue;
     }
@@ -633,7 +632,6 @@ async function parseMarkdownToDocx(markdown) {
       elements.push(new Paragraph({
         children: [new TextRun({ 
           text: line.slice(2), 
-          italics: true, 
           size: 24,
           font: 'Segoe UI',
           color: COLORS.text,
@@ -642,7 +640,7 @@ async function parseMarkdownToDocx(markdown) {
         border: { 
           left: { style: BorderStyle.SINGLE, size: 24, color: COLORS.accent } 
         },
-        spacing: { before: 100, after: 100, line: 276 },
+        spacing: { before: 120, after: 120, line: 360 },
         shading: { fill: COLORS.blockquoteBg },
       }));
       continue;
@@ -654,7 +652,7 @@ async function parseMarkdownToDocx(markdown) {
       continue;
     }
 
-    // Regular paragraph
+    // Regular paragraph - match PDF style
     flushList();
 
     const runs = processInlineFormatting(line);
@@ -662,7 +660,7 @@ async function parseMarkdownToDocx(markdown) {
     if (runs.length > 0) {
       elements.push(new Paragraph({
         children: runs,
-        spacing: { after: 160, line: 276 },
+        spacing: { after: 180, line: 340 }, // 1.4 line spacing (close to PDF's 1.7 for printed)
       }));
     }
   }
