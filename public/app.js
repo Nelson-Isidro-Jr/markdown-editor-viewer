@@ -685,4 +685,15 @@ gantt
       supportPopup.style.display = 'none';
     });
   }
+
+  // ───── Info/FAQ Toggle ─────
+  const infoToggle = document.getElementById('info-toggle');
+  const infoContent = document.getElementById('info-content');
+  if (infoToggle && infoContent) {
+    infoToggle.addEventListener('click', () => {
+      const expanded = infoToggle.getAttribute('aria-expanded') === 'true';
+      infoToggle.setAttribute('aria-expanded', !expanded);
+      infoContent.hidden = expanded;
+    });
+  }
 })();

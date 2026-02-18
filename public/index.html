@@ -5,38 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Markdown to PDF Converter — Free Online MD Editor & Exporter | No Signup</title>
   
-  <!-- Preconnect for Performance -->
+  <!-- Preconnect & Preload for Performance -->
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+  <link rel="preload" href="/style.css" as="style">
+  <link rel="preload" href="/app.js" as="script">
   
+  <!-- Google Search Console Verification -->
+  <meta name="google-site-verification" content="9f1c56ac4fb41a96">
+
   <!-- SEO Meta Tags -->
   <meta name="description" content="Free Markdown to PDF converter. Edit Markdown online with live preview, export to PDF, Word, HTML. Supports Mermaid diagrams, code highlighting. No signup, no ads, 100% free.">
   <meta name="keywords" content="markdown to pdf, md to pdf, markdown editor, markdown converter, pdf converter, word export, docx, html export, mermaid, online editor, free, no signup">
   <meta name="author" content="Markdown Tools">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="googlebot" content="index, follow">
-  <link rel="canonical" href="https://markdown-editor-viewer.onrender.com">
+  <link rel="canonical" href="https://markdown-editor-viewer.onrender.com/">
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://markdown-editor-viewer.onrender.com">
+  <meta property="og:url" content="https://markdown-editor-viewer.onrender.com/">
   <meta property="og:title" content="Markdown to PDF — Free Online Converter | Edit, Preview, Export">
   <meta property="og:description" content="Convert Markdown to PDF, Word, HTML for free. Live preview, Mermaid diagrams, syntax highlighting. No signup required!">
-  <meta property="og:image" content="https://markdown-editor-viewer.onrender.com/og-image.svg">
+  <meta property="og:image" content="https://markdown-editor-viewer.onrender.com/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:type" content="image/svg+xml">
+  <meta property="og:image:type" content="image/png">
   <meta property="og:site_name" content="MDtoPDF">
   <meta property="og:locale" content="en_US">
   
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="https://markdown-editor-viewer.onrender.com">
+  <meta name="twitter:url" content="https://markdown-editor-viewer.onrender.com/">
   <meta name="twitter:title" content="Markdown to PDF — Free Online Converter">
   <meta name="twitter:description" content="Convert Markdown to PDF, Word, HTML for free. Live preview, Mermaid diagrams. No signup!">
-  <meta name="twitter:image" content="https://markdown-editor-viewer.onrender.com/og-image.svg">
+  <meta name="twitter:image" content="https://markdown-editor-viewer.onrender.com/og-image.png">
   <meta name="twitter:creator" content="@markdown_tools">
   
   <!-- Additional SEO -->
@@ -63,13 +68,6 @@
       "priceCurrency": "USD",
       "availability": "https://schema.org/InStock"
     },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "ratingCount": "1500",
-      "bestRating": "5",
-      "worstRating": "1"
-    },
     "featureList": [
       "Markdown to PDF conversion",
       "Markdown to Word (DOCX) export",
@@ -82,7 +80,7 @@
       "GitHub Flavored Markdown support",
       "Free to use without signup"
     ],
-    "screenshot": "https://markdown-editor-viewer.onrender.com/og-image.svg",
+    "screenshot": "https://markdown-editor-viewer.onrender.com/og-image.png",
     "creator": {
       "@type": "Organization",
       "name": "Markdown Tools"
@@ -164,54 +162,41 @@
   }
   </script>
   
-  <!-- Breadcrumb Structured Data -->
+  <!-- HowTo Structured Data (for rich results) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
+    "@type": "HowTo",
+    "name": "How to Convert Markdown to PDF Online for Free",
+    "description": "Convert any Markdown document to a professional PDF with live preview, Mermaid diagrams, and syntax highlighting.",
+    "step": [
       {
-        "@type": "ListItem",
+        "@type": "HowToStep",
         "position": 1,
-        "name": "Home",
-        "item": "https://markdown-editor-viewer.onrender.com"
+        "name": "Write or paste Markdown",
+        "text": "Type your Markdown in the editor on the left, or drag and drop a .md file onto the editor."
       },
       {
-        "@type": "ListItem",
+        "@type": "HowToStep",
         "position": 2,
-        "name": "Markdown Editor",
-        "item": "https://markdown-editor-viewer.onrender.com/#editor"
+        "name": "Preview your document",
+        "text": "See your Markdown rendered in real-time in the preview pane on the right side."
       },
       {
-        "@type": "ListItem",
+        "@type": "HowToStep",
         "position": 3,
-        "name": "PDF Export",
-        "item": "https://markdown-editor-viewer.onrender.com/#export"
+        "name": "Export to PDF, Word, or HTML",
+        "text": "Click the Export button and choose PDF, Word (DOCX), HTML, or Markdown. Your file downloads instantly."
       }
-    ]
+    ],
+    "tool": {
+      "@type": "HowToTool",
+      "name": "MDtoPDF online editor"
+    },
+    "totalTime": "PT1M"
   }
   </script>
   
-  <!-- Software Application Schema -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "MDtoPDF - Markdown to PDF Converter",
-    "applicationCategory": "UtilitiesApplication",
-    "operatingSystem": "Web Browser",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "ratingCount": "2500"
-    }
-  }
-  </script>
   
   <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2358a6ff'/%3E%3Cstop offset='100%25' style='stop-color:%231f6feb'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='6' fill='url(%23grad)'/%3E%3Cpath d='M8 10h3l2 4 2-4h3v12h-3v-7l-2 4-2-4v7h-3z' fill='white'/%3E%3Cpath d='M20 18h4v2h-4zm0-4h4v2h-4zm0-4h4v2h-4z' fill='rgba(255,255,255,0.7)'/%3E%3C/svg%3E" type="image/svg+xml">
@@ -221,53 +206,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css" id="hljs-theme">
 </head>
 <body>
-  <!-- SEO Content (Hidden but readable by search engines) -->
-  <article class="seo-content" style="position:absolute;left:-9999px;top:-9999px;">
-    <h1>Free Markdown to PDF Converter Online</h1>
-    <p>Convert Markdown to PDF, Word (DOCX), and HTML instantly with our free online editor. Features live preview, Mermaid diagram support, syntax highlighting, and GitHub Flavored Markdown. No signup required.</p>
-    
-    <h2>Features</h2>
-    <ul>
-      <li>Markdown to PDF conversion with professional formatting</li>
-      <li>Export to Microsoft Word (DOCX) format</li>
-      <li>Export to self-contained HTML files</li>
-      <li>Real-time Markdown preview</li>
-      <li>Mermaid diagram support (flowcharts, sequence diagrams, Gantt charts)</li>
-      <li>Syntax highlighting for 180+ programming languages</li>
-      <li>Dark and light theme support</li>
-      <li>Drag and drop .md file support</li>
-      <li>GitHub Flavored Markdown (GFM) support</li>
-      <li>100% free with no signup required</li>
-    </ul>
-    
-    <h2>How to Use</h2>
-    <ol>
-      <li>Type or paste your Markdown in the editor</li>
-      <li>See live preview on the right side</li>
-      <li>Click Export and choose your format (PDF, Word, HTML, MD)</li>
-      <li>Download your converted file</li>
-    </ol>
-    
-    <h2>Supported Markdown Features</h2>
-    <p>This editor supports all standard Markdown syntax including:</p>
-    <ul>
-      <li>Headers (H1-H6)</li>
-      <li>Bold and italic text</li>
-      <li>Links and images</li>
-      <li>Ordered and unordered lists</li>
-      <li>Code blocks with syntax highlighting</li>
-      <li>Tables</li>
-      <li>Blockquotes</li>
-      <li>Horizontal rules</li>
-      <li>Task lists</li>
-    </ul>
-    
-    <h2>Keywords</h2>
-    <p>markdown to pdf, md to pdf, markdown converter, markdown editor online, free pdf converter, word export, docx converter, html export, mermaid diagrams, syntax highlighting, github markdown, gfm editor</p>
-  </article>
   
   <!-- ===== Toolbar ===== -->
-  <header class="toolbar">
+  <header class="toolbar" role="banner">
     <div class="toolbar-left">
       <h1 class="logo">MD<span class="logo-accent">to</span>PDF</h1>
       <div class="toolbar-divider"></div>
@@ -321,7 +262,7 @@
   </header>
 
   <!-- ===== Main Editor Area ===== -->
-  <main class="editor-container">
+  <main class="editor-container" role="main" aria-label="Markdown editor and preview">
     <!-- Editor Pane -->
     <div class="pane editor-pane">
       <div class="pane-header">
@@ -351,6 +292,70 @@
       <div class="preview-content" id="preview"></div>
     </div>
   </main>
+
+  <!-- ===== Info & FAQ Section (visible, crawlable content) ===== -->
+  <section class="info-section" id="info">
+    <button class="info-toggle" id="info-toggle" aria-expanded="false" aria-controls="info-content">
+      <span>About this tool & FAQ</span>
+      <svg class="info-toggle-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="info-content" id="info-content" hidden>
+      <article>
+        <h2>Free Markdown to PDF Converter Online</h2>
+        <p>MDtoPDF is a free online Markdown editor that lets you write, preview, and export Markdown to PDF, Word (DOCX), and HTML. It supports GitHub Flavored Markdown, Mermaid diagrams, and syntax highlighting for 180+ languages. No signup, no ads, no watermarks.</p>
+
+        <h3>How to Convert Markdown to PDF</h3>
+        <ol>
+          <li>Type or paste your Markdown in the editor on the left</li>
+          <li>See it rendered in real-time in the preview pane on the right</li>
+          <li>Click <strong>Export</strong> and choose <strong>PDF</strong>, <strong>Word</strong>, <strong>HTML</strong>, or <strong>Markdown</strong></li>
+          <li>Your file downloads instantly with professional formatting</li>
+        </ol>
+
+        <h3>Features</h3>
+        <ul>
+          <li><strong>PDF Export</strong> — Professional A4 documents with page numbers</li>
+          <li><strong>Word Export</strong> — Fully formatted .docx files compatible with Microsoft Word</li>
+          <li><strong>Mermaid Diagrams</strong> — Flowcharts, sequence diagrams, Gantt charts rendered in exports</li>
+          <li><strong>Syntax Highlighting</strong> — Code blocks highlighted for 180+ languages</li>
+          <li><strong>Live Preview</strong> — See your Markdown rendered as you type</li>
+          <li><strong>Dark &amp; Light Theme</strong> — Switch between themes for comfortable editing</li>
+          <li><strong>Drag &amp; Drop</strong> — Drop .md files directly onto the editor</li>
+          <li><strong>GitHub Flavored Markdown</strong> — Tables, task lists, strikethrough, and more</li>
+        </ul>
+
+        <h3>Frequently Asked Questions</h3>
+        <details>
+          <summary>How do I convert Markdown to PDF for free?</summary>
+          <p>Paste or type your Markdown in the editor, then click Export and select PDF. Your document is converted instantly with proper formatting, syntax highlighting, and Mermaid diagram support. No signup or payment required.</p>
+        </details>
+        <details>
+          <summary>Can I export Markdown to Word (DOCX)?</summary>
+          <p>Yes. Click Export and choose Word Document. The exported .docx file preserves formatting, tables, code blocks, and renders Mermaid diagrams as images.</p>
+        </details>
+        <details>
+          <summary>Does this editor support Mermaid diagrams?</summary>
+          <p>Yes. Wrap your Mermaid code in a <code>```mermaid</code> code block. Flowcharts, sequence diagrams, Gantt charts, and more render in live preview and export perfectly to PDF and Word.</p>
+        </details>
+        <details>
+          <summary>Is this Markdown editor really free?</summary>
+          <p>Completely free. No signup, no limits on exports, no watermarks, no ads. Open the page and start writing.</p>
+        </details>
+        <details>
+          <summary>Does it work with GitHub Flavored Markdown (GFM)?</summary>
+          <p>Yes. Tables, task lists, strikethrough, autolinks, and fenced code blocks with syntax highlighting are all supported.</p>
+        </details>
+        <details>
+          <summary>How do I open a .md file?</summary>
+          <p>Drag and drop any .md file onto the editor, or paste the content directly. The preview updates in real-time.</p>
+        </details>
+        <details>
+          <summary>Can I use this Markdown editor offline?</summary>
+          <p>The editor needs an internet connection for initial load and PDF/Word export (which happens server-side). Your work auto-saves in your browser so you won't lose progress.</p>
+        </details>
+      </article>
+    </div>
+  </section>
 
   <!-- ===== Loading Overlay ===== -->
   <div class="loading-overlay" id="loading-overlay">

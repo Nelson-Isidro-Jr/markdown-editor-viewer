@@ -6,6 +6,7 @@ const { Marked } = require('marked');
 const hljs = require('highlight.js');
 const { Document, Packer, Paragraph, TextRun, HeadingLevel, Table, TableRow, TableCell, WidthType, AlignmentType, BorderStyle, ImageRun } = require('docx');
 const helmet = require('helmet');
+const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 
 const app = express();
@@ -33,6 +34,9 @@ app.use(helmet({
   },
   crossOriginEmbedderPolicy: false,
 }));
+
+// Gzip/Brotli compression for all responses (Core Web Vitals)
+app.use(compression());
 
 // Rate limiting - 100 requests per 15 minutes per IP
 const limiter = rateLimit({
@@ -100,6 +104,34 @@ app.get('/sitemap.xml', (req, res) => {
   res.setHeader('Content-Type', 'application/xml; charset=utf-8');
   res.setHeader('Cache-Control', 'public, max-age=86400'); // 1 day
   res.send(sitemap);
+});
+
+// Generate PNG from SVG for OG image (social platforms don't support SVG)
+let ogImageCache = null;
+app.get('/og-image.png', async (req, res) => {
+  try {
+    if (ogImageCache) {
+      res.setHeader('Content-Type', 'image/png');
+      res.setHeader('Cache-Control', 'public, max-age=604800'); // 7 days
+      return res.end(ogImageCache);
+    }
+    const svgPath = path.join(__dirname, 'public', 'og-image.svg');
+    const svgContent = fs.readFileSync(svgPath, 'utf-8');
+    const b = await getBrowser();
+    const page = await b.newPage();
+    await page.setViewport({ width: 1200, height: 630 });
+    await page.setContent(`<!DOCTYPE html><html><body style="margin:0;padding:0;">${svgContent}</body></html>`, { waitUntil: 'networkidle0' });
+    const pngBuffer = await page.screenshot({ type: 'png', clip: { x: 0, y: 0, width: 1200, height: 630 } });
+    await page.close();
+    ogImageCache = Buffer.from(pngBuffer);
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Cache-Control', 'public, max-age=604800');
+    res.end(ogImageCache);
+  } catch (err) {
+    console.error('OG image generation error:', err);
+    // Fall back to SVG
+    res.redirect('/og-image.svg');
+  }
 });
 
 // Health check endpoint for monitoring

@@ -945,3 +945,114 @@ html, body {
   transform: scale(1.05);
   box-shadow: 0 2px 8px rgba(255, 221, 0, 0.4);
 }
+
+/* ───── Info / FAQ Section ───── */
+.info-section {
+  border-top: 1px solid var(--border);
+  background: var(--bg-secondary);
+}
+
+.info-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 10px 20px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: color var(--transition);
+}
+
+.info-toggle:hover {
+  color: var(--text-primary);
+}
+
+.info-toggle-arrow {
+  transition: transform 0.2s ease;
+}
+
+.info-toggle[aria-expanded="true"] .info-toggle-arrow {
+  transform: rotate(180deg);
+}
+
+.info-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 24px 32px;
+  color: var(--text-primary);
+  line-height: 1.7;
+}
+
+.info-content[hidden] {
+  display: none;
+}
+
+.info-content h2 {
+  font-size: 1.4em;
+  margin: 0 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.info-content h3 {
+  font-size: 1.1em;
+  margin: 20px 0 8px;
+}
+
+.info-content p {
+  margin: 8px 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.info-content ul, .info-content ol {
+  margin: 8px 0;
+  padding-left: 24px;
+}
+
+.info-content li {
+  margin: 4px 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.info-content details {
+  margin: 6px 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.info-content summary {
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  background: var(--bg-tertiary);
+  transition: background var(--transition);
+}
+
+.info-content summary:hover {
+  background: var(--bg-hover);
+}
+
+.info-content details[open] summary {
+  border-bottom: 1px solid var(--border);
+}
+
+.info-content details p {
+  padding: 10px 14px;
+  margin: 0;
+}
+
+.info-content code {
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 13px;
+  font-family: var(--font-mono);
+}
