@@ -787,17 +787,20 @@ app.post('/export/pdf', async (req, res) => {
 
     const finalHtml = pdfTemplate.replace('{{CONTENT}}', html);
 
-    await page.setContent(finalHtml, { waitUntil: 'networkidle0', timeout: 30000 });
+    // Use domcontentloaded instead of networkidle0 for faster, more reliable loading
+    // networkidle0 can timeout on slow CDN resources or complex diagrams
+    await page.setContent(finalHtml, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
     // Wait for Mermaid diagrams to render (the template sets this flag)
+    // Increased timeout for complex diagrams
     await page.waitForFunction(() => window.__MERMAID_RENDERED__ === true, {
-      timeout: 15000,
+      timeout: 60000,
     }).catch(() => {
       // If no mermaid diagrams or timeout, proceed anyway
     });
 
-    // Small extra wait for SVG rendering to finalize
-    await new Promise((r) => setTimeout(r, 500));
+    // Extra wait for any remaining resources (images, fonts, SVG rendering)
+    await new Promise((r) => setTimeout(r, 2000));
 
     const pdfUint8 = await page.pdf({
       format: 'A4',
