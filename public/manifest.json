@@ -1,23 +1,104 @@
 {
   "name": "Markdown Editor, Viewer & PDF Exporter",
-  "short_name": "MD Editor",
+  "short_name": "MDtoPDF",
   "description": "Free online Markdown editor with PDF, Word, HTML export. Supports Mermaid diagrams and syntax highlighting.",
-  "start_url": "/",
+  "start_url": "/?utm_source=homescreen&utm_medium=pwa&utm_campaign=pwa",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "browser"],
   "background_color": "#0d1117",
   "theme_color": "#0d1117",
   "orientation": "any",
+  "scope": "/",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["utilities", "productivity", "developer tools", "text editors"],
   "icons": [
     {
       "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2358a6ff'/%3E%3Cstop offset='100%25' style='stop-color:%231f6feb'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='96' fill='url(%23grad)'/%3E%3Cpath d='M128 160h48l32 64 32-64h48v192h-48v-112l-32 64-32-64v112h-48z' fill='white'/%3E%3Cpath d='M320 288h64v32h-64zm0-64h64v32h-64zm0-64h64v32h-64z' fill='rgba(255,255,255,0.7)'/%3E%3C/svg%3E",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2358a6ff'/%3E%3Cstop offset='100%25' style='stop-color:%231f6feb'/%3E%3C/defs%3E%3Crect width='192' height='192' rx='38' fill='url(%23grad)'/%3E%3Cpath d='M48 60h18l12 24 12-24h18v72h-18v-42l-12 24-12-24v42h-18z' fill='white'/%3E%3Cpath d='M120 108h24v12h-24zm0-24h24v12h-24zm0-24h24v12h-24z' fill='rgba(255,255,255,0.7)'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ],
-  "categories": ["utilities", "productivity", "developer tools"],
-  "lang": "en",
-  "dir": "ltr",
-  "scope": "/",
-  "prefer_related_applications": false
+  "screenshots": [
+    {
+      "src": "https://markdown-editor-viewer.onrender.com/og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "MDtoPDF - Markdown Editor with Live Preview"
+    },
+    {
+      "src": "https://markdown-editor-viewer.onrender.com/og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "MDtoPDF Mobile View"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "New Markdown Document",
+      "short_name": "New",
+      "description": "Start a new Markdown document",
+      "url": "/?action=new&utm_source=shortcut",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' rx='16' fill='%231f6feb'/%3E%3Cpath d='M44 24v48M24 48h48' stroke='white' stroke-width='8' stroke-linecap='round'/%3E%3C/svg%3E",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Export to PDF",
+      "short_name": "PDF",
+      "description": "Export current document as PDF",
+      "url": "/?action=export-pdf&utm_source=shortcut",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' rx='16' fill='%23dc3545'/%3E%3Cpath d='M28 20h40l12 12v44H28z' stroke='white' stroke-width='4' fill='none'/%3E%3Cpath d='M36 40h24M36 52h16' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "share_target": {
+    "action": "/",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "file",
+          "accept": ["text/markdown", ".md", "text/plain"]
+        }
+      ]
+    }
+  },
+  "file_handlers": [
+    {
+      "action": "/",
+      "accept": {
+        "text/markdown": [".md", ".markdown"],
+        "text/plain": [".txt"]
+      }
+    }
+  ],
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "edge_side_panel": {
+    "preferred_width": 600
+  }
 }

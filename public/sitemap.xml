@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
     <loc>https://markdown-editor-viewer.onrender.com/</loc>
-    <lastmod>2026-02-17</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://markdown-editor-viewer.onrender.com/og-image.png</image:loc>
+      <image:title>Markdown to PDF Converter - Free Online Tool</image:title>
+      <image:caption>Convert Markdown to PDF, Word, and HTML with live preview</image:caption>
+    </image:image>
   </url>
 </urlset>

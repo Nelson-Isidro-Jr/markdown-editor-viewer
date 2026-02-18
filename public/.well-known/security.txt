@@ -1,0 +1,15 @@
+# Security Policy for MDtoPDF
+# https://markdown-editor-viewer.onrender.com
+
+# Contact: GitHub Issues for security concerns
+Contact: https://github.com/isidronels/markdown-editor-viewer/issues
+
+# Preferred Languages
+Preferred-Languages: en
+
+# Canonical URI
+Canonical: https://markdown-editor-viewer.onrender.com/.well-known/security.txt
+
+# This is a free, open-source tool
+# No user data is stored on servers
+# All processing happens client-side or during export sessions

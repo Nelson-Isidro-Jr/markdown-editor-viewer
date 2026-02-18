@@ -78,10 +78,25 @@ app.use((req, res, next) => {
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('X-XSS-Protection', '1; mode=block');
   
+  // Add Link header for canonical URL (helps search engines)
+  if (req.hostname === 'markdown-editor-viewer.onrender.com' || req.hostname === 'localhost') {
+    const canonicalUrl = `https://markdown-editor-viewer.onrender.com${req.path}`;
+    res.setHeader('Link', `<${canonicalUrl}>; rel="canonical"`);
+  }
+  
   // Cache control for HTML pages
   if (req.path === '/' || req.path.endsWith('.html')) {
-    res.setHeader('Cache-Control', 'public, max-age=3600'); // 1 hour for HTML
+    res.setHeader('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400'); // 1 hour, stale ok for 1 day
   }
+  
+  // Add Vary header for proper caching
+  res.setHeader('Vary', 'Accept-Encoding');
+  
+  // Add Permissions-Policy for security (replaces Feature-Policy)
+  res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+  
+  // Add Referrer-Policy for privacy
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   
   next();
 });
@@ -92,17 +107,24 @@ app.get('/sitemap.xml', (req, res) => {
   const today = new Date().toISOString().split('T')[0];
   
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>${baseUrl}/</loc>
     <lastmod>${today}</lastmod>
-    <changefreq>weekly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>${baseUrl}/og-image.png</image:loc>
+      <image:title>Markdown to PDF Converter - Free Online Tool</image:title>
+      <image:caption>Convert Markdown to PDF, Word, and HTML with live preview</image:caption>
+    </image:image>
   </url>
 </urlset>`;
   
   res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-  res.setHeader('Cache-Control', 'public, max-age=86400'); // 1 day
+  res.setHeader('Cache-Control', 'public, max-age=86400, stale-while-revalidate=604800'); // 1 day, stale ok for 1 week
   res.send(sitemap);
 });
 

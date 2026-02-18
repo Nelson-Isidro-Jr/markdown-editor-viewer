@@ -1,0 +1,29 @@
+/* TEAM */
+	Developer: Isidron Elsw
+	Site: https://github.com/isidronels
+	Location: Worldwide
+	
+/* THANKS */
+	Google Fonts
+	Marked.js - Markdown parser
+	Highlight.js - Syntax highlighting
+	Mermaid - Diagram rendering
+	Puppeteer - PDF generation
+
+/* SITE */
+	Last update: 2026/02/18
+	Language: English
+	Standards: HTML5, CSS3, JavaScript ES6+
+	Components: Node.js, Express, Puppeteer
+	IDE: VS Code
+
+/* TOOL */
+	Name: MDtoPDF
+	Description: Free online Markdown to PDF converter
+	Version: 1.0
+	URL: https://markdown-editor-viewer.onrender.com
+
+/* LEGAL */
+	License: MIT
+	Copyright: 2024-2026
+	Privacy: No data is stored on servers. All processing happens in browser or during export.
